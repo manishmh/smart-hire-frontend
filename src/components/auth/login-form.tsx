@@ -13,14 +13,17 @@ import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/schema/input-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import { login } from "@/server/login";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl")
   const router = useRouter();
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -34,27 +37,21 @@ const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     startTransition(async () => {
       try {
-        const backend_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-        const response = await fetch(`${backend_url}/login`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json"
-          },
-          body: JSON.stringify(values)
-        })
+          const data = await login(values, callbackUrl) ;
 
-        const data = await response.json();
+          const { success, message } = data;
+          console.log(message);
 
-        if (!response.ok) {
-          toast.error(data.message);
-          return;
-        }
+          if (success) {
+            toast.success(message)
+            router.push("/company/dashboard")
+          } else {
+            toast.error(message)
+          }
 
-        toast.success(`Welcome back ${values.email}`);
-        router.push("/company/dashboard")
       } catch (error) {
-        toast.error("Something went wrong! try again")  
-        console.error(error)
+        console.error(error) 
+        toast.error("Something went wrong. Please try again")
       }
     })
   }
