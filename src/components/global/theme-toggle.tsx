@@ -7,7 +7,7 @@ const ThemeToggle = () => {
   const { setTheme, theme } = useTheme();
 
   return (
-    <div className="cursor-pointer text-xl">
+    <div className="cursor-pointer text-xl absolute">
         {theme === "light" ? (
             <div onClick={() => setTheme("dark")}>
                 <IoMoonOutline />
