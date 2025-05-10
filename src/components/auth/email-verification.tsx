@@ -2,15 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useEffect, useTransition } from "react";
-import { RotatingLines } from "react-loader-spinner";
-import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useTransition } from "react";
+import { toast } from "sonner";
 
 const EmailVerification = () => {
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
 
   useEffect(() => {
     startTransition(async () => {
@@ -42,7 +41,7 @@ const EmailVerification = () => {
     <div className="h-screen w-full flex flex-col justify-center items-center">
       {isPending ? (
         <div>
-          <RotatingLines width="30" strokeColor="white" />
+          loading...
         </div>
       ) : (
         <div className="flex flex-col gap-3 items-center justify-center px-5 w-full sm:max-w-lg rounded-lg h-full sm:h-auto border shadow-2xl dark:sm:bg-[#191919] py-20 sm:py-8">
