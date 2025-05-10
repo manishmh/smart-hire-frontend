@@ -13,14 +13,17 @@ import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/schema/input-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import { login } from "@/server/login";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl")
   const router = useRouter();
 
   const form = useForm<z.infer<typeof loginSchema>>({
