@@ -10,32 +10,34 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { loginSchema } from "@/schema/input-validation";
+import { newPasswordSchema } from "@/schema/input-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-const LoginForm = () => {
+const NewPassword = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof newPasswordSchema>>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: ""
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
+  const onSubmit = (values: z.infer<typeof newPasswordSchema>) => {
     startTransition(async () => {
       try {
         const backend_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-        const response = await fetch(`${backend_url}/login`, {
+        const response = await fetch(`${backend_url}/new-password?token=${token}`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -50,7 +52,10 @@ const LoginForm = () => {
           return;
         }
 
-        
+        toast.success("Password reset successfully! continue to login");
+        setTimeout(() => {
+            router.push("/auth/login");
+        }, 2000)
       } catch (error) {
         toast.error("Something went wrong! try again");
         console.error(error);
@@ -65,7 +70,7 @@ const LoginForm = () => {
           isPending ? "pointer-events-none opacity-80" : "pointer-events-auto"
         } `}
       >
-        <h1 className="font-bold text-2xl">Create an account</h1>
+        <h1 className="font-bold text-2xl">Set new password</h1>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -74,19 +79,19 @@ const LoginForm = () => {
             <div className="space-y-3 w-full">
               <FormField
                 control={form.control}
-                name="email"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-semibold text-gray-500 dark:text-gray-300">
-                      Email
+                      New Password
                       <span className="text-red-500"> *</span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         disabled={isPending}
-                        type="email"
-                        placeholder="manish@gmail.com"
+                        type="password"
+                        placeholder="********"
                         className="mt-1.5 rounded-sm focus-visible:ring-0 focus-visible:ring-offset-0 bg-primary-input"
                       />
                     </FormControl>
@@ -96,17 +101,14 @@ const LoginForm = () => {
               />
               <FormField
                 control={form.control}
-                name="password"
+                name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-semibold text-gray-500 dark:text-gray-300 flex justify-between pt-2">
                       <div>
-                        Password
+                        Confirm Password
                         <span className="text-red-500"> *</span>
                       </div>
-                        <Link href="/auth/reset-password" className="text-gray-400 font-normal hover:underline">
-                          Forgot your password?
-                        </Link>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -126,15 +128,15 @@ const LoginForm = () => {
                 disabled={isPending}
                 className="bg-[#2a3a5e] hover:bg-[#344774] cursor-pointer dark:bg-gray-200 text-white dark:text-black dark:hover:bg-white w-full font-semibold "
               >
-                Login
+                Change Password
               </Button>
             </div>
           </form>
         </Form>
-        <Link href={"/auth/register"}>
+        <Link href={"/auth/login"}>
           <div className="text-blue-500 mt-3 font-medium text-sm flex gap-1 self-start">
-            Create a new account?
-            <span className="text-blue-500">Register</span>
+            Back to?
+            <span className="text-blue-500">Login</span>
           </div>
         </Link>
       </div>
@@ -142,4 +144,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default NewPassword;

@@ -47,7 +47,6 @@ const refinedPasswordSchema = z
     message: "Password should contain at least one symbol",
   });
 
-
 export const registerSchema = z.object({
     ...nameSchema.shape,
     ...emailSchema.shape,
@@ -57,4 +56,20 @@ export const registerSchema = z.object({
 export const loginSchema = z.object({
     ...emailSchema.shape,
     ...passwordSchema.shape,
+})
+
+export const newPasswordSchema = z.object({
+  password: refinedPasswordSchema,
+  confirmPassword: z.string({
+    required_error: "Confirm password is required",
+  }),
+})
+.superRefine(({ confirmPassword, password }, ctx) => {
+  if (confirmPassword !== password) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "The passwords did not match",
+      path: ["confirmPassword"],
+    });
+  }
 })
