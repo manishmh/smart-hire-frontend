@@ -18,10 +18,13 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/user-slice";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -41,6 +44,7 @@ const LoginForm = () => {
             "content-type": "application/json",
           },
           body: JSON.stringify(values),
+          credentials: 'include'
         });
 
         const data = await response.json();
@@ -50,7 +54,15 @@ const LoginForm = () => {
           return;
         }
 
-        
+        const user = {
+          ...data.user,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        }
+
+        toast.success("User logged in successfully")
+        dispatch(setUser(user))
+        router.push("/company/dashboard")
       } catch (error) {
         toast.error("Something went wrong! try again");
         console.error(error);
