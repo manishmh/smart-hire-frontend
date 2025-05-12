@@ -63,7 +63,7 @@ const ResetPassword = () => {
   return (
     <div className="flex flex-col gap-3 items-center justify-center h-screen">
       <div
-        className={`flex flex-col gap-3 items-center justify-center px-5 w-full sm:max-w-lg rounded-lg h-full sm:h-auto border shadow-2xl dark:sm:bg-[#191919] py-20 sm:py-8 ${
+        className={`flex flex-col gap-3 items-center justify-center px-5 w-full sm:max-w-lg rounded-lg h-full sm:h-auto border shadow-2xl dark:sm:bg-[#0a0c0e] py-20 sm:py-8 ${
           isPending ? "pointer-events-none opacity-80" : "pointer-events-auto"
         } `}
       >

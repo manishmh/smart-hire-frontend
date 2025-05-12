@@ -9,7 +9,7 @@ const SessionGuard = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    let isMounted = true;
+    const controller = new AbortController();
     const backend_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
     const verify = async () => {
@@ -20,46 +20,53 @@ const SessionGuard = ({ children }: { children: ReactNode }) => {
           headers: {
             "Cache-Control": "no-store",
           },
+          signal: controller.signal,
         });
 
         const data = await res.json();
         if (!data.success) {
-          throw new Error("Unauthorized, accessToken expired.")
+          throw new Error("Unauthorized, accessToken expired.");
         }
 
-        if (isMounted) setIsAuthenticated(true);
+        setIsAuthenticated(true);
       } catch (err) {
-        if (isMounted) {
-          try {
-            const res = await fetch(`${backend_url}/access-token`, {
-              method: "GET",
-              credentials: "include",
-              headers: {
-                "Cache-Control": "no-store",
-              }
-            }) 
+        if (err instanceof Error && err.name === "AbortError") return;
 
-            const data = await res.json();
-            if (!data.success) {
-              throw new Error("Unauthorized, refreshToken expired. Login again")
-            }
+        try {
+          const res = await fetch(`${backend_url}/access-token`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Cache-Control": "no-store",
+            },
+            signal: controller.signal,
+          });
 
-          } catch (error) {
-            setIsAuthenticated(false);
-            toast.error("Session over! Please Login again");
-            router.push("/auth/login");
+          const data = await res.json();
+          if (!data.success) {
+            throw new Error("Unauthorized, refreshToken expired. Login again");
           }
+
+          setIsAuthenticated(true);
+        } catch (error) {
+          if (error instanceof Error && error.name === "AbortError") return;
+
+          setIsAuthenticated(false);
+          toast.error("Session over! Please Login again");
+          router.push("/auth/login");
         }
       }
     };
 
-    verify();
+    verify(); 
 
-    const interval = setInterval(verify, 10000);
+    const interval = setInterval(() => {
+      verify();
+    }, 3 * 60 * 1000);
 
     return () => {
-      isMounted = false;
-      clearInterval(interval);
+      controller.abort(); 
+      clearInterval(interval); 
     };
   }, [router]);
 

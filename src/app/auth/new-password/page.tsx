@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import NewPassword from "@/components/auth/new-password";
+import NewPassword from "@/components/auth/new-password-form";
 
 export default function Page() {
   return (
