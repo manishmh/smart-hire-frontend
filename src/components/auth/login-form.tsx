@@ -73,7 +73,7 @@ const LoginForm = () => {
   return (
     <div className="flex flex-col gap-3 items-center justify-center h-screen">
       <div
-        className={`flex flex-col gap-3 items-center justify-center px-5 w-full sm:max-w-lg rounded-lg h-full sm:h-auto border shadow-2xl dark:sm:bg-[#191919] py-20 sm:py-8 ${
+        className={`flex flex-col gap-3 items-center justify-center px-5 w-full sm:max-w-lg rounded-lg h-full sm:h-auto border shadow-2xl dark:sm:bg-[#0a0c0e] py-20 sm:py-8 ${
           isPending ? "pointer-events-none opacity-80" : "pointer-events-auto"
         } `}
       >
@@ -136,7 +136,7 @@ const LoginForm = () => {
               <Button
                 type="submit"
                 disabled={isPending}
-                className="bg-[#2a3a5e] hover:bg-[#344774] cursor-pointer dark:bg-gray-200 text-white dark:text-black dark:hover:bg-white w-full font-semibold "
+                className="bg-[#2a3a5e] hover:bg-[#344774] cursor-pointer dark:bg-[#D0D1D1] text-white dark:text-black dark:hover:bg-white w-full font-semibold "
               >
                 Login
               </Button>
@@ -144,7 +144,7 @@ const LoginForm = () => {
           </form>
         </Form>
         <Link href={"/auth/register"}>
-          <div className="text-blue-500 mt-3 font-medium text-sm flex gap-1 self-start">
+          <div className="text-gray-400 mt-3 font-medium text-sm flex gap-1 self-start">
             Create a new account?
             <span className="text-blue-500">Register</span>
           </div>

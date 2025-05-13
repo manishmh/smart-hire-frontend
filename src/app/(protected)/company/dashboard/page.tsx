@@ -1,6 +1,8 @@
 const CompanyDashboard = () => {
   return (
-    <div>CompanyDashboard</div>
+    <div className="">
+      main content
+    </div>
   )
 }
 

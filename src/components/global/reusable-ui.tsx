@@ -30,7 +30,7 @@ export const Text = ({
   return (
     <div
       className={cn(
-        "text-[#3f3f47] bg-gradient-to-b dark:text-transparent dark:bg-clip-text dark:from-[#eaeaea] dark:to-[#b8b8b8] text-xl font-mono",
+        "text-[#3f3f47] bg-gradient-to-b dark:text-transparent dark:bg-clip-text dark:from-[#eaeaea] dark:to-[#b8b8b8] font-mono",
         className
       )}
     >

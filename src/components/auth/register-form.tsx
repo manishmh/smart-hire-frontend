@@ -64,7 +64,7 @@ const RegisterForm = () => {
   return (
     <div className="flex flex-col gap-3 items-center justify-center h-screen">
       <div
-        className={`flex flex-col gap-3 items-center justify-center px-3 w-full sm:max-w-lg rounded-lg h-full sm:h-auto border shadow-2xl dark:sm:bg-[#191919] py-20 sm:py-8 ${
+        className={`flex flex-col gap-3 items-center justify-center px-3 w-full sm:max-w-lg rounded-lg h-full sm:h-auto border shadow-2xl dark:sm:bg-[#0a0c0e] py-20 sm:py-8 ${
           isPending ? "pointer-events-none opacity-80" : "pointer-events-auto"
         } `}
       >
@@ -152,7 +152,7 @@ const RegisterForm = () => {
           </form>
         </Form>
         <Link href={"/auth/login"}>
-          <div className="text-blue-500 mt-3 font-medium text-sm flex gap-1 self-start">
+          <div className="text-gray-400 mt-3 font-medium text-sm flex gap-1 self-start">
             Already have an account ?
             <span className="text-blue-500">Login</span>
           </div>

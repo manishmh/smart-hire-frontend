@@ -1,48 +1,28 @@
-
-
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
-  darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+  darkMode: 'class', // enables class-based dark mode
+  content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}'],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-    },
     extend: {
-      screens: {
-        "ssm": "300px",
-        "sm": "480px",
-        "2xl": "1400px",
-        "3xl" : "1600px",
-        "4xl" : "1750px",
-      },
       colors: {
+        background: {
+          light: '#ffffff',
+          dark: '#07080A',
+        },
+        foreground: {
+          light: '#1f1f1f',
+          dark: '#ffffff',
+        },
         primary: {
+          light: '#f4f4f5',
+          dark: '#111827',
         },
-        secondary: {
-
-        }
-      },
-      animation: {
-        shimmer: "shimmer 2s linear infinite",
-      },
-      keyframes: {
-        shimmer: {
-          from: {
-            backgroundPosition: "0 0",
-          },
-          to: {
-            backgroundPosition: "-200% 0",
-          },
+        accent: {
+          light: '#3b82f6',
+          dark: '#2563eb',
         },
-      }, 
+      },
     },
   },
   plugins: [],
-}
+};
