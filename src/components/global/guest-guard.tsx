@@ -23,7 +23,7 @@ const GuestGuard = ({ children }: { children: React.ReactNode }) => {
         const data = await res.json();
 
         if (data.success) {
-          router.replace("/company/dashboard");
+          router.replace("/dashboard");
         } else {
           setChecked(true); 
         }
