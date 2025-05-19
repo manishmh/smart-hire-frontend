@@ -1,6 +1,6 @@
 const CompanyDashboard = () => {
   return (
-    <div className="bg-slate-50">
+    <div className="">
       main content
     </div>
   )

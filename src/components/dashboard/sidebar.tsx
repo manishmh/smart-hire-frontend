@@ -131,7 +131,7 @@ const Sidebar = () => {
                       <FaPlus className="text-xs" /> New form
                     </div>
                   </div>
-                  <div className="max-h-[150px] scroll-smooth overflow-scroll pb-2">
+                  <div className="max-h-[80px] scroll-container scrollbar-none overflow-y-scroll pb-2">
                     {newFormState ? (
                       // Input box to take new form name
                       <div className="py-1">
