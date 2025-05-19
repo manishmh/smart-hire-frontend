@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import * as z from "zod";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/user-slice";
+import axios from 'axios'
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -35,40 +36,30 @@ const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    startTransition(async () => {
-      try {
-        const backend_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-        const response = await fetch(`${backend_url}/login`, {
-          method: "POST",
+  startTransition(async () => {
+    try {
+      const backend_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+
+      const response = await axios.post(
+        `${backend_url}/login`,
+        values,
+        {
+          withCredentials: true, 
           headers: {
-            "content-type": "application/json",
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(values),
-          credentials: 'include'
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          toast.error(data.message);
-          return;
         }
+      );
 
-        const user = {
-          ...data.user,
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-        }
-
-        toast.success("User logged in successfully")
-        dispatch(setUser(user))
-        router.push("/company/dashboard")
-      } catch (error) {
-        toast.error("Something went wrong! try again");
-        console.error(error);
-      }
-    });
-  };
+      toast.success("User logged in successfully");
+      dispatch(setUser(response.data.user));
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error("Something went wrong! try again");
+      console.error(error);
+    }
+  });
+}; 
 
   return (
     <div className="flex flex-col gap-3 items-center justify-center h-screen">

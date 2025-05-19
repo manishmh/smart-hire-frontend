@@ -5,6 +5,9 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
     <SessionGuard>
       <>{children}</>
     </SessionGuard>
+    // <>
+    //   {children}
+    // </>
   );
 };
 

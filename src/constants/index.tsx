@@ -13,17 +13,17 @@ export const topItems: Items[] = [
   {
     title: "Dashboard",
     logo: <MdDashboard />,
-    link: "/company/dashboard",
+    link: "/dashboard",
   },
   {
     title: "All forms",
     logo: <SiGoogleforms />,
-    link: "/company/dashboard/all-forms",
+    link: "/dashboard/all-forms",
   },
   {
     title: "Create new form",
     logo: <SiGoogleforms />,
-    link: "/company/dashboard/new-form",
+    link: "/dashboard/new-form",
   },
 ];
 
@@ -31,6 +31,6 @@ export const bottomItems: Items[] = [
   {
     title: "Settings",
     logo: <IoSettingsSharp />,
-    link: "/company/dashboard/settings",
+    link: "/dashboard/settings",
   },
 ];

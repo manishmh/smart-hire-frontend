@@ -34,7 +34,7 @@ const Topbar = () => {
   };
 
   return (
-    <div className="border-b py-2 px-4 bg-slate-50 dark:bg-black w-full flex">
+    <div className="border-b py-2 px-4 bg-slate-100 dark:bg-black w-full flex">
       <div>
         <button
           className={`flex items-center py-1 gap-1 px-2 rounded-sm transition-colors duration-300 
