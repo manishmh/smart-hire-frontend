@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { registerSchema } from "@/schema/input-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -24,41 +25,39 @@ const RegisterForm = () => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema), 
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
       email: "",
-      password: ""
-    }
+      password: "",
+    },
   });
 
   const onSubmit = (values: z.infer<typeof registerSchema>) => {
     startTransition(async () => {
       try {
         const backend_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-        const response = await fetch(`${backend_url}/register`, {
-          method: "POST",
+
+        const response = await axios.post(`${backend_url}/register`, values, {
           headers: {
-            "content-type": "application/json",
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(values)
-        })
-  
-        const data = await response.json();
+          withCredentials: true, 
+        });
 
-        if (!response.ok) {
-          toast.error(data.message)
-          return;
-        }
-
-        console.log(data);
-        toast.success(data.message);
+        toast.success(response.data.message);
+        console.log(response.data);
         // router.push("/company/dashboard");
       } catch (error) {
         console.error(error);
-        toast.error("Something went wrong! try again");
+
+        if (axios.isAxiosError(error)) {
+          toast.error(error.response?.data?.message || "Registration failed");
+        } else {
+          toast.error("Something went wrong! Try again");
+        }
       }
-    })
+    });
   };
 
   return (
