@@ -11,6 +11,7 @@ const SessionGuard = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const controller = new AbortController();
     const backend_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+    console.log("session guard invoked")
 
     const verify = async () => {
       try {
@@ -62,7 +63,7 @@ const SessionGuard = ({ children }: { children: ReactNode }) => {
 
     const interval = setInterval(() => {
       verify();
-    }, 3 * 60 * 1000);
+    }, 3 * 60 * 1000); // runs every 3 minutes
 
     return () => {
       controller.abort(); 

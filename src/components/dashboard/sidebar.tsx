@@ -82,6 +82,7 @@ const Sidebar = () => {
             alt="smart-hire-logo"
             height={60}
             width={200}
+            priority
             className="w-full h-full object-contain brightness-0 dark:brightness-100"
           />
         </div>
@@ -131,7 +132,7 @@ const Sidebar = () => {
                       <FaPlus className="text-xs" /> New form
                     </div>
                   </div>
-                  <div className="max-h-[80px] scroll-container scrollbar-none overflow-y-scroll pb-2">
+                  <div className="max-h-[150px] scroll-container scrollbar-none overflow-y-scroll pb-2">
                     {newFormState ? (
                       // Input box to take new form name
                       <div className="py-1">
