@@ -1,9 +1,17 @@
 // tailwind.config.js
 module.exports = {
-  darkMode: 'class', // enables class-based dark mode
-  content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}'],
+  darkMode: 'class',
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
+      width: {
+        '230': '230px',
+      },
       colors: {
         background: {
           light: '#ffffff',
@@ -21,6 +29,14 @@ module.exports = {
           light: '#3b82f6',
           dark: '#2563eb',
         },
+      },
+      screens: {
+        xs: '480px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
+        '2xl': '1536px',
       },
     },
   },
