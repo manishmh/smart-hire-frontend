@@ -1,14 +1,18 @@
 "use client";
 
 import { bottomItems, topItems } from "@/constants";
-import { createNewForm, isNotCompletedForm } from "@/lib/api/forms";
+import { isNotCompletedForm } from "@/lib/api/forms";
+import {
+  handleIncompletedForm,
+  useIncompletedForms,
+} from "@/store/dashboard/incompleted-forms-slice";
+import { openNewFormModal } from "@/store/dashboard/new-form-modal-slice";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState, useTransition } from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { FaChevronUp, FaPlus } from "react-icons/fa6";
-import { toast } from "sonner";
-import Loader from "../global/loader";
+import { useDispatch } from "react-redux";
 import ThemeToggle from "../global/theme-toggle";
 
 export type Form = {
@@ -23,21 +27,18 @@ export type Form = {
 
 const Sidebar = () => {
   const pathname = usePathname();
-  // if needed incompletedForms make a redux state out of it. 
-  const [incompletedForms, setIncompletedForms] = useState<Form[] | null>(null);
-  const [isNewFormPending, startNewFormTransition] = useTransition();
-  const [newFormState, setNewFormState] = useState<boolean>(false);
-  const [newFormName, setNewFormName] = useState<string>("");
-  const router = useRouter();
+  const incompletedForms = useIncompletedForms();
+  console.log("incompletedforms sidebar", incompletedForms);
   const [showIncompletedForms, setShowIncompletedForms] =
     useState<boolean>(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchNewForms = async () => {
       try {
         const data = await isNotCompletedForm();
         if (data?.success) {
-          setIncompletedForms(data.forms);
+          dispatch(handleIncompletedForm(data.forms));
         }
       } catch (err) {
         console.error("Failed to fetch new forms", err);
@@ -46,32 +47,6 @@ const Sidebar = () => {
 
     fetchNewForms();
   }, []);
-
-  const handleInputKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      setNewFormState(false);
-
-      startNewFormTransition(async () => {
-        const form = await createNewForm(newFormName);
-
-        if (form?.success) {
-          setIncompletedForms((prev) => [form.form, ...(prev ?? [])]);
-          setNewFormName("");
-          setNewFormState(false);
-          toast.success(form.message);
-          router.push(`/dashboard/new-form/${form.form.id}`);
-        } else {
-          toast.error(form?.message);
-          setNewFormState(true);
-        }
-      });
-    }
-  };
-
-  const handleInputBlur = () => {
-    setNewFormName("")
-    setNewFormState(false)
-  }
 
   return (
     <div className="border-r w-[230px] space-y-6 h-screen p-2 py-4 flex flex-col dark:bg-black bg-slate-100 shrink-0">
@@ -127,37 +102,12 @@ const Sidebar = () => {
                     <div
                       className="relative flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md border border-transparent
                     hover:dark:bg-[#151617]  hover:dark:border-gray-900 hover:bg-gray-200"
-                      onClick={() => setNewFormState(!newFormState)}
+                      onClick={() => dispatch(openNewFormModal())}
                     >
                       <FaPlus className="text-xs" /> New form
                     </div>
                   </div>
                   <div className="max-h-[150px] scroll-container scrollbar-none overflow-y-scroll pb-2">
-                    {newFormState ? (
-                      // Input box to take new form name
-                      <div className="py-1">
-                        <input
-                          type="text"
-                          className="w-full dark:border-gray-900 border border-gray-500 pl-2 py-0.5 rounded-sm outline-none"
-                          placeholder="Enter a form name"
-                          autoFocus
-                          value={newFormName}
-                          onChange={(e) => setNewFormName(e.target.value)}
-                          onKeyDown={handleInputKeydown}
-                          onBlur={handleInputBlur}
-                        />
-                      </div>
-                    ) : (
-                      // Form name after being created
-                      <div
-                        className={`flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md border border-transparent hover:dark:bg-[#151617]  hover:dark:border-gray-900 hover:bg-gray-200
-                      ${!newFormName && "hidden"}
-                    `}
-                      >
-                        {isNewFormPending && <Loader />}
-                        {newFormName}
-                      </div>
-                    )}
                     {/* Mapping all forms that are not completed yet! */}
                     {incompletedForms &&
                       showIncompletedForms &&
