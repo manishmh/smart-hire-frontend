@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { handleApiError } from './handle-api-error';
+import { FormData } from '@/components/dashboard/new-form-modal';
 
 const NEW_FORM_URL = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/new-form`;
 
@@ -44,9 +45,9 @@ export const isNotCompletedForm = async () => {
   }
 };
 
-export const createNewForm = async (name: string) => {
+export const createNewForm = async (formData: FormData) => {
   try {
-    const response = await axios.post(NEW_FORM_URL, { name }, {
+    const response = await axios.post(NEW_FORM_URL, formData, {
       withCredentials: true,
     });
 

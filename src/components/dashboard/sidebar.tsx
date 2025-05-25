@@ -2,11 +2,17 @@
 
 import { bottomItems, topItems } from "@/constants";
 import { isNotCompletedForm } from "@/lib/api/forms";
+import {
+  handleIncompletedForm,
+  useIncompletedForms,
+} from "@/store/dashboard/incompleted-forms-slice";
+import { openNewFormModal } from "@/store/dashboard/new-form-modal-slice";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaChevronUp, FaPlus } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
 import ThemeToggle from "../global/theme-toggle";
 
 export type Form = {
@@ -21,17 +27,16 @@ export type Form = {
 
 const Sidebar = () => {
   const pathname = usePathname();
-  // if needed incompletedForms make a redux state out of it. 
-  const [incompletedForms, setIncompletedForms] = useState<Form[] | null>(null);
-  const router = useRouter();
+  const incompletedForms = useIncompletedForms();
   const [showIncompletedForms, setShowIncompletedForms] = useState<boolean>(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchNewForms = async () => {
       try {
         const data = await isNotCompletedForm();
         if (data?.success) {
-          setIncompletedForms(data.forms);
+          dispatch(handleIncompletedForm(data.forms));
         }
       } catch (err) {
         console.error("Failed to fetch new forms", err);
@@ -40,7 +45,6 @@ const Sidebar = () => {
 
     fetchNewForms();
   }, []);
-
 
   return (
     <div className="border-r w-[230px] fixed space-y-6 h-screen p-2 py-4 flex flex-col dark:bg-black bg-slate-100 shrink-0">
@@ -95,7 +99,9 @@ const Sidebar = () => {
                     </div>
                     <div
                       className="relative flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md border border-transparent
-                    hover:dark:bg-[#151617]  hover:dark:border-gray-900 hover:bg-gray-200">
+                    hover:dark:bg-[#151617]  hover:dark:border-gray-900 hover:bg-gray-200"
+                      onClick={() => dispatch(openNewFormModal())}
+                    >
                       <FaPlus className="text-xs" /> New form
                     </div>
                   </div>

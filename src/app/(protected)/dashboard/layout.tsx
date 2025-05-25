@@ -1,10 +1,12 @@
+import NewFormModal from "@/components/dashboard/new-form-modal";
 import Sidebar from "@/components/dashboard/sidebar";
 import Topbar from "@/components/dashboard/topbar";
 import { ReactNode } from "react";
 
 const CompanyDashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex h-screen overflow-hidden text-sm">
+    <div className="flex text-sm h-screen overflow-hidden relative">
+      <NewFormModal />
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Topbar />

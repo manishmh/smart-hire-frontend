@@ -17,7 +17,7 @@ const NewForm = async ({ params }: { params: Promise<{ formId: string }> }) => {
     <div>
       {/* <FormSections form={form.form} />
       <FormFields />  */}
-      
+      <pre>{JSON.stringify(data, null, 2)}</pre> 
     </div>
   );
 };

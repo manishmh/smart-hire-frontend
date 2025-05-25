@@ -1,15 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './user-slice';
-import sidebarReducer from './dashboard/sidebar-slice'
-import backButtonReducer from './dashboard/dashboard-back-button-slice'
+import { configureStore } from '@reduxjs/toolkit';
+import backButtonReducer from './dashboard/dashboard-back-button-slice';
+import incompletedFormsReducer from './dashboard/incompleted-forms-slice';
+import newFormModalReducer from './dashboard/new-form-modal-slice';
+import sidebarReducer from './dashboard/sidebar-slice';
 import newFormReducer from './dashboard/new-form-slice'
+import userReducer from './user-slice';
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         sidebar: sidebarReducer,
         backButton: backButtonReducer,
-        form: newFormReducer,
+        newFormModal: newFormModalReducer,
+        incompletedForms: incompletedFormsReducer,
+        form: newFormReducer
     }
 })
 
