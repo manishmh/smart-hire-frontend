@@ -1,5 +1,8 @@
 import { fetchFormDetails } from "@/lib/api/forms";
 import { cookies } from "next/headers";
+import { form } from '@/constants/create-new-file'
+import FormSections from "@/components/dashboard/new-form/form-sections";
+import FormFields from "@/components/dashboard/new-form/form-fields";
 
 const NewForm = async ({ params }: { params: Promise<{ formId: string }> }) => {
   const { formId } = await params;
@@ -10,7 +13,13 @@ const NewForm = async ({ params }: { params: Promise<{ formId: string }> }) => {
 
   const data = await fetchFormDetails(formId, accessToken);
 
-  return <div>id: {JSON.stringify(data)} </div>;
+  return (
+    <div>
+      {/* <FormSections form={form.form} />
+      <FormFields />  */}
+      <pre>{JSON.stringify(data, null, 2)}</pre> 
+    </div>
+  );
 };
 
 export default NewForm;

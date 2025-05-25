@@ -28,9 +28,7 @@ export type Form = {
 const Sidebar = () => {
   const pathname = usePathname();
   const incompletedForms = useIncompletedForms();
-  console.log("incompletedforms sidebar", incompletedForms);
-  const [showIncompletedForms, setShowIncompletedForms] =
-    useState<boolean>(true);
+  const [showIncompletedForms, setShowIncompletedForms] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,7 +47,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className="border-r w-[230px] space-y-6 h-screen p-2 py-4 flex flex-col dark:bg-black bg-slate-100 shrink-0">
+    <div className="border-r w-[230px] fixed space-y-6 h-screen p-2 py-4 flex flex-col dark:bg-black bg-slate-100 shrink-0">
       <div className="flex items-center justify-between w-full">
         <div className="pointer-events-none h-6 object-cover overflow-hidden pl-2">
           <Image
@@ -119,14 +117,14 @@ const Sidebar = () => {
                           <div>
                             <div
                               className="flex items-center gap-2 cursor-pointer px-2 py-0.5 rounded-md border border-transparent
-                  hover:dark:bg-[#151617]  hover:dark:border-gray-900 hover:bg-gray-200"
+                              hover:dark:bg-[#151617]  hover:dark:border-gray-900 hover:bg-gray-200"
                             >
                               <span className="text-gray-400">-</span>
                               {form.name}
                             </div>
                           </div>
                         </Link>
-                      ))}
+                    ))}
                   </div>
                 </div>
               )}
