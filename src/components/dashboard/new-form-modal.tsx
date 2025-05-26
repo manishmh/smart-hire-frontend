@@ -10,7 +10,7 @@ import {
   useNewFormModal,
 } from "@/store/dashboard/new-form-modal-slice";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { IoClose } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -27,6 +27,7 @@ const NewFormModal = () => {
   const incompletedForms = useIncompletedForms();
   const dispatch = useDispatch();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -69,25 +70,27 @@ const NewFormModal = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("form data submitted", formData);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    startTransition(async () => {
+      e.preventDefault();
+      console.log("form data submitted", formData);
 
-    const data = await createNewForm(formData);
-    console.log("newform data", data);
+      const data = await createNewForm(formData);
+      console.log("newform data", data);
 
-    if (data?.success) {
-      dispatch(closeNewFormModal());
+      if (data?.success) {
+        dispatch(closeNewFormModal());
 
-      const newIncompletedForms = [data.form, ...incompletedForms];
-      console.log("new completed", newIncompletedForms);
-      dispatch(handleIncompletedForm(newIncompletedForms));
+        const newIncompletedForms = [data.form, ...incompletedForms];
+        console.log("new completed", newIncompletedForms);
+        dispatch(handleIncompletedForm(newIncompletedForms));
 
-      router.push(`/dashboard/new-form/${data.form.id}`);
-      toast.success(data.message);
-    } else {
-      toast.error(data.message);
-    }
+        router.push(`/dashboard/new-form/${data.form.id}`);
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    });
   };
 
   const templates = [
@@ -97,14 +100,18 @@ const NewFormModal = () => {
   if (!isNewFormModal) return;
 
   return (
-    <div className="w-screen h-screen absolute bg-black/20 dark:bg-black/70 z-50 flex items-center justify-center">
+    <div className={`w-screen h-screen absolute bg-black/20 dark:bg-black/70 z-50 flex items-center justify-center 
+      ${isPending && "pointer-events-none"}
+    `}>
       <div
         className="absolute h-full w-full"
         onClick={() => dispatch(closeNewFormModal())}
       ></div>
 
       <div className="bg-white dark:bg-gray-900 w-3xl max-h-10/12 p-1.5 rounded-3xl shadow-lg">
-        <div className="w-full h-full border border-gray-200 dark:border-gray-700 rounded-2xl bg-gradient-to-b from-gray-200 to-white dark:from-gray-700 dark:to-black/10 relative">
+        <div className={`w-full h-full border border-gray-200 dark:border-gray-700 rounded-2xl bg-gradient-to-b from-gray-200 to-white dark:from-gray-700 dark:to-black/10 relative 
+          ${isPending && "pointer-events-none opacity-40"}
+        `}>
           <button
             className="text-xl text-gray-400 hover:bg-gray-300 dark:text-gray-300 dark:hover:bg-gray-700 rounded-full p-1 cursor-pointer hover:text-gray-800 dark:hover:text-white absolute right-2 top-2"
             onClick={() => dispatch(closeNewFormModal())}
@@ -130,9 +137,12 @@ const NewFormModal = () => {
                   type="text"
                   id="name"
                   name="name"
+                  autoFocus
+                  disabled={isPending}
                   placeholder="Enter your form name"
                   value={formData.name}
                   onChange={handleChange}
+
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-300 ease-in-out text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-500"
                   required
                 />
@@ -152,12 +162,14 @@ const NewFormModal = () => {
                       ? "border-purple-500 bg-gradient-to-br from-purple-100 to-fuchsia-100 dark:from-purple-900 dark:to-fuchsia-900 shadow-lg"
                       : "border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:border-purple-300 dark:hover:border-purple-400 hover:shadow-md"
                   }`}
+                    aria-disabled={isPending}
                     onClick={() => handlePageOptionChange("single")}
                   >
                     <input
                       type="radio"
                       name="pageOption"
                       value="single"
+                      disabled={isPending}
                       checked={formData.pageOption === "single"}
                       onChange={() => handlePageOptionChange("single")}
                       className="absolute top-3 right-3 h-5 w-5 text-purple-600 border-gray-300 dark:border-gray-700 focus:ring-purple-500 opacity-0 cursor-pointer"
@@ -188,6 +200,7 @@ const NewFormModal = () => {
                       type="radio"
                       name="pageOption"
                       value="multiple"
+                      disabled={isPending}
                       checked={formData.pageOption === "multiple"}
                       onChange={() => handlePageOptionChange("multiple")}
                       className="absolute top-3 right-3 h-5 w-5 text-purple-600 border-gray-300 dark:border-gray-700 focus:ring-purple-500 opacity-0 cursor-pointer"
@@ -227,6 +240,7 @@ const NewFormModal = () => {
                           type="radio"
                           name="multiPageChoice"
                           value="template"
+                          disabled={isPending}
                           checked={formData.multiPageChoice === "template"}
                           onChange={() =>
                             handleMultiPageChoiceChange("template")
@@ -254,6 +268,7 @@ const NewFormModal = () => {
                           type="radio"
                           name="multiPageChoice"
                           value="scratch"
+                          disabled={isPending}
                           checked={formData.multiPageChoice === "scratch"}
                           onChange={() =>
                             handleMultiPageChoiceChange("scratch")
@@ -308,6 +323,7 @@ const NewFormModal = () => {
 
               <button
                 type="submit"
+                disabled={isPending}
                 className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-fuchsia-700 dark:from-purple-800 dark:to-fuchsia-900 text-white font-extrabold py-3 px-6 rounded-xl
               shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-700 focus:ring-opacity-75
               transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-102 text-xl"

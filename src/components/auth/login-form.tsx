@@ -94,6 +94,7 @@ const LoginForm = () => {
                         {...field}
                         disabled={isPending}
                         type="email"
+                        autoFocus
                         placeholder="manish@gmail.com"
                         className="mt-1.5 rounded-sm focus-visible:ring-0 focus-visible:ring-offset-0 bg-primary-input"
                       />
