@@ -51,9 +51,14 @@ const LoginForm = () => {
         }
       );
 
-      toast.success("User logged in successfully");
-      dispatch(setUser(response.data.user));
-      router.push("/dashboard");
+      if (response.data.success) {
+        toast.success("User logged in successfully");
+        dispatch(setUser(response.data.user));
+        router.push("/dashboard");
+      } else {
+        toast.error(response.data.message);
+      }
+
     } catch (error) {
       toast.error("Something went wrong! try again");
       console.error(error);

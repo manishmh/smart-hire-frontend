@@ -45,8 +45,12 @@ const RegisterForm = () => {
           withCredentials: true, 
         });
 
-        toast.success(response.data.message);
-        console.log(response.data);
+        if (response.data.success) {
+          toast.success(response.data.message);
+          console.log(response.data);
+        } else {
+          toast.error(response.data.message)
+        }
         // router.push("/company/dashboard");
       } catch (error) {
         console.error(error);

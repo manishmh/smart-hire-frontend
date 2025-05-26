@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { RootState } from ".";
 
 type User = {
   id: string;
   name: string;
   email: string;
   role: string;
-  accessToken: string;
-  refreshToken: string;
+  image: string;
+  emailVerified: string;
+  isTwoFactorEnabled: boolean;
   createdAt: Date;
+  updatedAt: Date;
 }
 
 interface UserState {
@@ -30,6 +34,10 @@ const userSlice = createSlice({
         }
     }
 })
+
+export const useUser = () => {
+    return useSelector((state: RootState) => state.user.user);
+}
 
 export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;
