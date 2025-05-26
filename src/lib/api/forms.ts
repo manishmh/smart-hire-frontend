@@ -6,13 +6,10 @@ import { handleApiError } from './handle-api-error';
 const NEW_FORM_URL = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/new-form`;
 
 // passing accesstoken because the front end is running on server and cannot pass token from browser.
-export const fetchFormDetails = async (formId: string, accessToken: string) => {
+export const fetchFormDetails = async (formId: string) => {
   try {
     const response = await axios.get(`${NEW_FORM_URL}/${formId}`, {
       withCredentials: true,
-      headers: { 
-        Cookie: `accessToken=${accessToken}`
-       },
     })
 
     return response.data;

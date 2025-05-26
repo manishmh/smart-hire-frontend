@@ -1,16 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { RootState } from "..";
-
-export type Form = {
-  id: string;
-  name: string;
-  description: string | null;
-  userId: string;
-  completed: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import { Form } from "@/schema/form-schema-type";
 
 interface incompletedFormsProps {
   form: Form[];

@@ -1,31 +1,34 @@
+"use client";
+
+import { use, useEffect, useState } from "react";
 import FormFields from "@/components/dashboard/new-form/form-fields";
 import FormHeader from "@/components/dashboard/new-form/form-header";
 import FormSections from "@/components/dashboard/new-form/form-sections";
-import { form } from "@/constants/create-new-file";
 import { fetchFormDetails } from "@/lib/api/forms";
-import { cookies } from "next/headers";
+import { Form } from "@/schema/form-schema-type";
 
-const NewForm = async ({ params }: { params: Promise<{ formId: string }> }) => {
-  const { formId } = await params;
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
+const NewForm = ({ params }: { params: Promise<{ formId: string }> }) => {
+  const { formId } = use(params);
 
-  if (!accessToken) return;
+  const [form, setForm] = useState<Form | null>(null);
 
-  const data = await fetchFormDetails(formId, accessToken);
-  const form = data.form;
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetchFormDetails(formId);
+      setForm(result.form);
+    };
 
-  if (!data) return;
+    fetchData();
+  }, [formId]);
+
+  if (!form) return null;
 
   return (
     <div>
-      {/* <FormSections form={form.form} />
-      <FormFields />  */}
       <FormHeader />
       <div className="max-w-10/12 bg-white border mx-auto p-6 rounded-lg">
         <FormSections form={form} />
-
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre>{JSON.stringify(form, null, 2)}</pre>
       </div>
     </div>
   );
