@@ -38,6 +38,7 @@ export interface Form {
   name: string;
   description?: string | null;
   completed: boolean;
+  pageOption: "single" | "multiple"
   userId: string;
   createdAt: string;
   updatedAt: string;

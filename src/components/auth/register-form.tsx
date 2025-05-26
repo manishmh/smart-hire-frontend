@@ -92,6 +92,7 @@ const RegisterForm = () => {
                         {...field}
                         disabled={isPending}
                         type="text"
+                        autoFocus
                         placeholder="Your name"
                         className="mt-1.5 rounded-sm focus-visible:ring-0 focus-visible:ring-offset-0 bg-primary-input"
                       />

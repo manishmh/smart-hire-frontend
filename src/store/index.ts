@@ -5,6 +5,7 @@ import newFormModalReducer from './dashboard/new-form-modal-slice';
 import sidebarReducer from './dashboard/sidebar-slice';
 import newFormReducer from './dashboard/new-form-slice'
 import userReducer from './user-slice';
+import formSaveStatusReducer from './dashboard/form-save-status'
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
         backButton: backButtonReducer,
         newFormModal: newFormModalReducer,
         incompletedForms: incompletedFormsReducer,
-        form: newFormReducer
+        form: newFormReducer,
+        formSaveStatus: formSaveStatusReducer,
     }
 })
 

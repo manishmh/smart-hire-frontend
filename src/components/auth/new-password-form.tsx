@@ -91,6 +91,7 @@ const NewPassword = () => {
                         {...field}
                         disabled={isPending}
                         type="password"
+                        autoFocus
                         placeholder="********"
                         className="mt-1.5 rounded-sm focus-visible:ring-0 focus-visible:ring-offset-0 bg-primary-input"
                       />
