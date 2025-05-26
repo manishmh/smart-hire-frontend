@@ -21,7 +21,7 @@ const NewForm = async ({ params }: { params: Promise<{ formId: string }> }) => {
     <div>
       {/* <FormSections form={form.form} />
       <FormFields />  */}
-        <FormHeader />
+      <FormHeader />
       <div className="max-w-10/12 bg-white border mx-auto p-6 rounded-lg">
         <FormSections form={form} />
 

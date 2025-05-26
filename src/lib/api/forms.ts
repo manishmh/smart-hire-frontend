@@ -65,7 +65,6 @@ export const updateForm = async (formId: string, data: Partial<Omit<Form, "id" |
       withCredentials: true,
     }) 
 
-    console.log('resonse', response)
     return response.data;
   } catch (error) {
     return handleApiError(error, "Failed to update form") 
